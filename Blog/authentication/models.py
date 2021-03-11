@@ -4,11 +4,13 @@ from django.conf import settings
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager, PermissionsMixin)
 from django.db import models
 
+
 # Create your models here.
+
 
 class UserManager(BaseUserManager):
 
-    def create_user(self, username, email, password = None):
+    def create_user(self, username, email, password=None):
         """Create and return a `User` with an email, username and password."""
         if username is None:
             raise TypeError('Users must have a username.')
@@ -33,10 +35,9 @@ class UserManager(BaseUserManager):
         user.save()
 
         return user
-    
+
 
 class User(AbstractBaseUser, PermissionsMixin):
-    
     username = models.CharField(db_index=True, max_length=255, unique=True)
     email = models.EmailField(db_index=True, unique=True)
     is_active = models.BooleanField(default=True)
@@ -94,9 +95,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
         token = jwt.encode(
             {
-                'id' : self.pk,
-                'exp' : int(dt.strftime("%d"))
-            } , settings.SECRET_KEY, algorithm = 'HS256'
+                'id': self.pk,
+                'exp': int(dt.strftime("%d"))
+            }, settings.SECRET_KEY, algorithm='HS256'
         )
         return token
-    
